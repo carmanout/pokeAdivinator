@@ -153,32 +153,15 @@ function updatePossibleTypes() {
 
 // Combine effectiveness for dual types
 function combineEffectiveness(eff1, eff2) {
-    // 3 (immune) overrides everything
-    if (eff1 === 3 || eff2 === 3) {
-        // If one is immune (3), result is immune unless the other is also immune
-        if (eff1 === 3 && eff2 === 3) return 3;
-        // If one is immune, the other determines
-        if (eff1 === 3) return eff2 === 2 ? 2 : eff2;
-        if (eff2 === 3) return eff1 === 2 ? 2 : eff1;
-    }
-    
-    // 1 (very effective) + 2 (resistant) = 0 (neutral)
-    if ((eff1 === 1 && eff2 === 2) || (eff1 === 2 && eff2 === 1)) {
-        return 0;
-    }
-    
-    // 1 + 1 = 1 (still very effective)
-    if (eff1 === 1 || eff2 === 1) {
-        return 1;
-    }
-    
-    // 2 + 2 = 2 (still resistant, but 0.25x damage)
-    if (eff1 === 2 && eff2 === 2) {
-        return 2;
-    }
-    
-    // Otherwise take the max (prioritize non-neutral)
-    return Math.max(eff1, eff2);
+    // Si alguno es inmune, resultado es inmune
+    if (eff1 === 3 || eff2 === 3) return 3;
+    // Convertir a multiplicador
+    const mult1 = eff1 === 1 ? 2 : eff1 === 2 ? 0.5 : 1;
+    const mult2 = eff2 === 1 ? 2 : eff2 === 2 ? 0.5 : 1;
+    const total = mult1 * mult2;
+    if (total > 1) return 1; // Muy eficaz
+    if (total < 1) return 2; // Resistente
+    return 0; // Neutro
 }
 
 // Render possible types
