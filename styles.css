@@ -1,3 +1,34 @@
+body.day-mode {
+    background-color: #f8f9fa;
+    color: #212529;
+}
+body.night-mode {
+    background-color: #181a1b;
+    color: #e0e0e0;
+}
+
+.card.day-mode {
+    background-color: #fff;
+    color: #212529;
+}
+.card.night-mode {
+    background-color: #23272b;
+    color: #e0e0e0;
+}
+
+.type-badge,
+.type-badge-large,
+.saved-pokemon-type,
+.type-ref-item {
+    transition: background 0.2s, color 0.2s;
+}
+
+.toggle-mode-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+}
 /* Type Colors */
 .type-bug { background: linear-gradient(135deg, #A8B820, #8B9A18); }
 .type-dark { background: linear-gradient(135deg, #705848, #4E3A30); }
@@ -16,12 +47,7 @@
 .type-psychic { background: linear-gradient(135deg, #F85888, #D83868); }
 .type-rock { background: linear-gradient(135deg, #B8A038, #988018); }
 .type-steel { background: linear-gradient(135deg, #B8B8D0, #9898B0); }
-.type-stellar { background: linear-gradient(135deg, #4466FF, #2244DD); }
 .type-water { background: linear-gradient(135deg, #6890F0, #4870D0); }
-
-body{
-    background: #1f1f1f;
-}
 
 /* Type Badge Styles */
 .type-badge {

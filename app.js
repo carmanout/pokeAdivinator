@@ -25,7 +25,6 @@ const typeNames = {
     psychic: 'Psíquico',
     rock: 'Roca',
     steel: 'Acero',
-    stellar: 'Astral',
     water: 'Agua'
 };
 
