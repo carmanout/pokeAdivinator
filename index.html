@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adivinador de Tipos Pokémon</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container py-4">
+        <!-- Header -->
+        <header class="text-center mb-4">
+            <h1 class="display-4 fw-bold text-primary">🔍 Adivinador de Tipos Pokémon</h1>
+        </header>
+
+        <!-- Main Game Area -->
+        <div class="row g-4">
+            <!-- Left Column: Attack Input -->
+            <div class="col-lg-5">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">🎯 Registrar Ataque</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="attackForm">
+                            <div class="mb-3">
+                                <label for="attackType" class="form-label fw-bold">Tipo de ataque usado:</label>
+                                <select class="form-select form-select-lg" id="attackType" required>
+                                    <option value="" selected disabled>Selecciona un tipo...</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Efectividad:</label>
+                                <div class="effectiveness-options">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="effectiveness" id="eff-1" value="1" required>
+                                        <label class="form-check-label text-danger fw-bold" for="eff-1">
+                                            🔥 Muy eficaz (2x daño)
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="effectiveness" id="eff-0" value="0" required>
+                                        <label class="form-check-label text-secondary" for="eff-0">
+                                            ➖ Neutral (1x daño)
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="effectiveness" id="eff-2" value="2" required>
+                                        <label class="form-check-label text-warning fw-bold" for="eff-2">
+                                            🛡️ Poco eficaz (0.5x daño)
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="effectiveness" id="eff-3" value="3" required>
+                                        <label class="form-check-label text-success fw-bold" for="eff-3">
+                                            ❌ Inmune (0 daño)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg w-100">
+                                ➕ Añadir Ataque
+                            </button>
+                        </form>
+
+                        <hr class="my-4">
+
+                        <!-- Attack History -->
+                        <h6 class="fw-bold mb-3">📜 Historial de Ataques:</h6>
+                        <div id="attackHistory" class="attack-history">
+                            <p class="text-muted text-center fst-italic">No hay ataques registrados</p>
+                        </div>
+
+                        <button id="clearAttacks" class="btn btn-outline-danger btn-sm w-100 mt-3" disabled>
+                            🗑️ Limpiar Todo
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Possible Types -->
+            <div class="col-lg-7">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">✨ Tipos Posibles</h5>
+                        <span id="possibleCount" class="badge bg-light text-dark fs-6">18</span>
+                    </div>
+                    <div class="card-body">
+                        <div id="possibleTypes" class="possible-types">
+                            <!-- Types will be displayed here -->
+                        </div>
+
+                        <div id="singleTypeSection" class="mt-4 d-none">
+                            <div class="alert alert-success">
+                                <h6 class="fw-bold mb-2">🎉 ¡Tipo identificado!</h6>
+                                <p class="mb-2">El Pokémon parece ser de tipo único:</p>
+                                <div id="identifiedSingleType" class="type-badge-large"></div>
+                            </div>
+                        </div>
+
+                        <div id="dualTypeSection" class="mt-4 d-none">
+                            <div class="alert alert-info">
+                                <h6 class="fw-bold mb-2">🔍 Posible combinación dual:</h6>
+                                <div id="identifiedDualTypes" class="dual-types-container"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Save Section -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0">💾 Guardar Pokémon</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="saveForm" class="row g-3 align-items-end">
+                            <div class="col-md-6">
+                                <label for="pokemonName" class="form-label fw-bold">Nombre del Pokémon:</label>
+                                <input type="text" class="form-control" id="pokemonName" placeholder="Ej: Pikachu" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="confirmedType1" class="form-label fw-bold">Tipo 1:</label>
+                                <select class="form-select" id="confirmedType1" required>
+                                    <option value="" selected disabled>Seleccionar...</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="confirmedType2" class="form-label fw-bold">Tipo 2 (opcional):</label>
+                                <select class="form-select" id="confirmedType2">
+                                    <option value="" selected>Ninguno</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-warning fw-bold">
+                                    💾 Guardar Pokémon
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Saved Pokemon Section -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">📚 Pokémon Guardados</h5>
+                        <button id="clearSaved" class="btn btn-outline-light btn-sm">🗑️ Limpiar</button>
+                    </div>
+                    <div class="card-body">
+                        <div id="savedPokemon" class="saved-pokemon-container">
+                            <p class="text-muted text-center fst-italic">No hay Pokémon guardados</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Type Reference -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="mb-0">📖 Referencia de Tipos</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="typeReference" class="type-reference">
+                            <!-- Type reference grid will be displayed here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="typechart.js"></script>
+    <script src="app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
