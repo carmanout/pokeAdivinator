@@ -23,6 +23,42 @@
                     <div class="card-header bg-primary text-white">
                         <h5 class="mb-0">🎯 Registrar Ataque</h5>
                     </div>
+                            <!-- Edit Popup Modal -->
+                            <div class="modal fade" id="editPokemonModal" tabindex="-1" aria-labelledby="editPokemonModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editPokemonModalLabel">Editar Pokémon</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="editPokemonForm">
+                                                <div class="mb-3">
+                                                    <label for="editPokemonName" class="form-label fw-bold">Nombre del Pokémon:</label>
+                                                    <input type="text" class="form-control" id="editPokemonName" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="editType1" class="form-label fw-bold">Tipo 1:</label>
+                                                    <select class="form-select" id="editType1" required></select>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="editType2" class="form-label fw-bold">Tipo 2 (opcional):</label>
+                                                    <select class="form-select" id="editType2"></select>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="editPokemonNotes" class="form-label fw-bold">Notas:</label>
+                                                    <textarea class="form-control" id="editPokemonNotes" rows="2"></textarea>
+                                                </div>
+                                                <input type="hidden" id="editPokemonIndex">
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="submit" form="editPokemonForm" class="btn btn-primary">Guardar Cambios</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                     <div class="card-body">
                         <form id="attackForm">
                             <div class="mb-3">
@@ -135,6 +171,10 @@
                                 <select class="form-select" id="confirmedType2">
                                     <option value="" selected>Ninguno</option>
                                 </select>
+                            </div>
+                            <div class="col-12">
+                                <label for="pokemonNotes" class="form-label fw-bold">Notas:</label>
+                                <textarea class="form-control" id="pokemonNotes" rows="2" placeholder="Notas, estrategias, etc..."></textarea>
                             </div>
                             <div class="col-12">
                                 <button type="submit" class="btn btn-warning fw-bold">

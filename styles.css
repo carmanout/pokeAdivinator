@@ -308,3 +308,8 @@ body.night-mode {
         padding: 10px;
     }
 }
+
+
+.saved-pokemon-notes.mt-2{
+    color: black;
+}

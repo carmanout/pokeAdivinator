@@ -1,3 +1,72 @@
+// Mostrar modal de edición y rellenar campos
+function editSavedPokemon(index) {
+    const pokemon = savedPokemon[index];
+    if (!pokemon) return;
+    document.getElementById('editPokemonName').value = pokemon.name;
+    document.getElementById('editType1').value = pokemon.type1;
+    document.getElementById('editType2').value = pokemon.type2 || '';
+    document.getElementById('editPokemonNotes').value = pokemon.notes || '';
+    document.getElementById('editPokemonIndex').value = index;
+    // Rellenar selects de tipos si no están
+    populateEditTypeSelects();
+    // Mostrar modal (Bootstrap 5)
+    const modal = new bootstrap.Modal(document.getElementById('editPokemonModal'));
+    modal.show();
+}
+
+// Rellenar selects del modal de edición
+function populateEditTypeSelects() {
+    const type1 = document.getElementById('editType1');
+    const type2 = document.getElementById('editType2');
+    if (!type1.options.length) {
+        const types = Object.keys(TypeChart);
+        type1.innerHTML = '<option value="" disabled>Seleccionar...</option>';
+        type2.innerHTML = '<option value="" selected>Ninguno</option>';
+        types.forEach(type => {
+            const displayName = typeNames[type] || type;
+            const opt1 = document.createElement('option');
+            opt1.value = type;
+            opt1.textContent = displayName;
+            type1.appendChild(opt1);
+            const opt2 = document.createElement('option');
+            opt2.value = type;
+            opt2.textContent = displayName;
+            type2.appendChild(opt2);
+        });
+    }
+}
+
+// Guardar cambios del modal de edición
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('editPokemonForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const index = parseInt(document.getElementById('editPokemonIndex').value);
+        const name = document.getElementById('editPokemonName').value.trim();
+        const type1 = document.getElementById('editType1').value;
+        const type2 = document.getElementById('editType2').value;
+        const notes = document.getElementById('editPokemonNotes').value.trim();
+        if (!name || !type1) {
+            alert('Por favor, introduce el nombre y al menos un tipo.');
+            return;
+        }
+        if (type1 === type2 && type2) {
+            alert('Los dos tipos no pueden ser iguales.');
+            return;
+        }
+        savedPokemon[index] = {
+            ...savedPokemon[index],
+            name,
+            type1,
+            type2: type2 || null,
+            notes
+        };
+        renderSavedPokemon();
+        saveToLocalStorage();
+        // Cerrar modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('editPokemonModal'));
+        modal.hide();
+    });
+});
 // Pokemon Type Guesser Application
 
 // State
@@ -307,6 +376,7 @@ function handleSaveSubmit(e) {
     const name = document.getElementById('pokemonName').value.trim();
     const type1 = document.getElementById('confirmedType1').value;
     const type2 = document.getElementById('confirmedType2').value;
+    const notes = document.getElementById('pokemonNotes').value.trim();
     
     if (!name || !type1) {
         alert('Por favor, introduce el nombre y al menos un tipo.');
@@ -322,6 +392,7 @@ function handleSaveSubmit(e) {
         name: name,
         type1: type1,
         type2: type2 || null,
+        notes: notes,
         timestamp: Date.now()
     };
     
@@ -331,6 +402,7 @@ function handleSaveSubmit(e) {
     document.getElementById('pokemonName').value = '';
     document.getElementById('confirmedType1').value = '';
     document.getElementById('confirmedType2').value = '';
+    document.getElementById('pokemonNotes').value = '';
     
     renderSavedPokemon();
     saveToLocalStorage();
@@ -358,7 +430,11 @@ function renderSavedPokemon() {
                 <span class="saved-pokemon-type type-${pokemon.type1}">${typeNames[pokemon.type1] || pokemon.type1}</span>
                 ${pokemon.type2 ? `<span class="saved-pokemon-type type-${pokemon.type2}">${typeNames[pokemon.type2] || pokemon.type2}</span>` : ''}
             </div>
-            <button class="btn btn-sm btn-outline-danger mt-2" onclick="deleteSavedPokemon(${index})">🗑️ Eliminar</button>
+            <div class="saved-pokemon-notes mt-2"><em>${pokemon.notes ? pokemon.notes.replace(/</g, '&lt;').replace(/>/g, '&gt;') : ''}</em></div>
+            <div class="d-flex justify-content-center gap-2 mt-2">
+                <button class="btn btn-sm btn-outline-primary" onclick="editSavedPokemon(${index})">✏️ Editar</button>
+                <button class="btn btn-sm btn-outline-danger" onclick="deleteSavedPokemon(${index})">🗑️ Eliminar</button>
+            </div>
         `;
         container.appendChild(card);
     });
